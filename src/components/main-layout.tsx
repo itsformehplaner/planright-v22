@@ -44,6 +44,7 @@ import { useHasMounted } from '@/hooks/use-has-mounted';
 import { ScrollArea } from './ui/scroll-area';
 import { ImportDialog } from '@/components/import-dialog';
 import { CommandMenu } from '@/components/command-menu';
+import { useCloudSync } from '@/hooks/use-cloud-sync';
 
 const navItems = [
   { href: '/', icon: Home, label: 'Projects' },
@@ -409,7 +410,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                 };
 
                 navigator.serviceWorker.addEventListener('controllerchange', handleControllerChange);
-                
+
                 if (registration.active) {
                     setIsServiceWorkerReady(true);
                 }
@@ -423,6 +424,14 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             });
         }
     }, [syncNotificationState]);
+
+    // Sync data from Cloudflare D1 on mount if logged in
+    const { refresh: syncFromCloud, syncing: isSyncing } = useCloudSync();
+    React.useEffect(() => {
+        if (hasMounted) {
+            syncFromCloud();
+        }
+    }, [hasMounted, syncFromCloud]);
     
     React.useEffect(() => {
         if (isServiceWorkerReady) {
