@@ -74,7 +74,7 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   return res.json();
 }
 
-function getSession(): string | null {
+export function getSession(): string | null {
   try {
     return localStorage.getItem(SESSION_KEY);
   } catch {
@@ -82,13 +82,13 @@ function getSession(): string | null {
   }
 }
 
-function setSession(token: string): void {
+export function setSession(token: string): void {
   try {
     localStorage.setItem(SESSION_KEY, token);
   } catch {}
 }
 
-function clearSession(): void {
+export function clearSession(): void {
   try {
     localStorage.removeItem(SESSION_KEY);
   } catch {}
