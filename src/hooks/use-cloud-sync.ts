@@ -2,7 +2,7 @@
 // Usage: useCloudSync() returns { isSynced, syncing, error, refresh }
 
 import * as React from 'react';
-import { cloudApi, getSession } from '@/lib/cloud-api';
+import { cloudApi } from '@/lib/cloud-api';
 
 export function useCloudSync() {
   const [isSynced, setIsSynced] = React.useState(false);
@@ -15,7 +15,7 @@ export function useCloudSync() {
     setError(null);
 
     try {
-      const token = cloudApi.getSession();
+      const token = localStorage.getItem('pr_session');
       if (!token) {
         setIsSynced(true);
         setSyncing(false);
@@ -45,7 +45,7 @@ export function useCloudSync() {
   }, []);
 
   const syncTask = React.useCallback(async (taskId: string, update: any) => {
-    const token = cloudApi.getSession();
+    const token = localStorage.getItem('pr_session');
     if (!token) {
       const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
       const idx = tasks.findIndex((t: any) => t.id === taskId);
@@ -63,7 +63,7 @@ export function useCloudSync() {
   }, []);
 
   const addTask = React.useCallback(async (task: any) => {
-    const token = cloudApi.getSession();
+    const token = localStorage.getItem('pr_session');
     if (!token) {
       const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
       const newTask = { ...task, id: task.id || crypto.randomUUID(), createdAt: new Date() };
@@ -79,7 +79,7 @@ export function useCloudSync() {
   }, []);
 
   const deleteTask = React.useCallback(async (taskId: string) => {
-    const token = cloudApi.getSession();
+    const token = localStorage.getItem('pr_session');
     if (!token) {
       const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
       const filtered = tasks.filter((t: any) => t.id !== taskId && t.parentId !== taskId);
@@ -93,7 +93,7 @@ export function useCloudSync() {
   }, []);
 
   const saveProject = React.useCallback(async (project: any) => {
-    const token = cloudApi.getSession();
+    const token = localStorage.getItem('pr_session');
     if (!token) {
       const projects = JSON.parse(localStorage.getItem('projects') || '[]');
       const idx = projects.findIndex((p: any) => p.id === project.id);
@@ -112,7 +112,7 @@ export function useCloudSync() {
   }, []);
 
   const deleteProject = React.useCallback(async (projectId: string) => {
-    const token = cloudApi.getSession();
+    const token = localStorage.getItem('pr_session');
     if (!token) {
       const projects = JSON.parse(localStorage.getItem('projects') || '[]');
       const filtered = projects.filter((p: any) => p.id !== projectId);
@@ -126,7 +126,7 @@ export function useCloudSync() {
   }, []);
 
   const saveNote = React.useCallback(async (note: any) => {
-    const token = cloudApi.getSession();
+    const token = localStorage.getItem('pr_session');
     if (!token) {
       const notes = JSON.parse(localStorage.getItem('notes') || '[]');
       const idx = notes.findIndex((n: any) => n.id === note.id);
@@ -145,7 +145,7 @@ export function useCloudSync() {
   }, []);
 
   const deleteNote = React.useCallback(async (noteId: string) => {
-    const token = cloudApi.getSession();
+    const token = localStorage.getItem('pr_session');
     if (!token) {
       const notes = JSON.parse(localStorage.getItem('notes') || '[]');
       const filtered = notes.filter((n: any) => n.id !== noteId);
@@ -159,7 +159,7 @@ export function useCloudSync() {
   }, []);
 
   const saveTemplate = React.useCallback(async (template: any) => {
-    const token = cloudApi.getSession();
+    const token = localStorage.getItem('pr_session');
     if (!token) {
       const templates = JSON.parse(localStorage.getItem('taskTemplates') || '[]');
       templates.unshift(template);
@@ -174,7 +174,7 @@ export function useCloudSync() {
   }, []);
 
   const deleteTemplate = React.useCallback(async (templateId: string) => {
-    const token = cloudApi.getSession();
+    const token = localStorage.getItem('pr_session');
     if (!token) {
       const templates = JSON.parse(localStorage.getItem('taskTemplates') || '[]');
       const filtered = templates.filter((t: any) => t.id !== templateId);
